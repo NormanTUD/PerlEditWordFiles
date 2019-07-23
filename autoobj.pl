@@ -38,3 +38,5 @@ foreach my $paragraph_index (0 .. $#paragraphs) {
 print ">>>>>\n".join("\n", $document->get_paragraphs())."\n<<<<<\n";
 
 $document->save_doc_as();
+$document->close();
+$document->quit();

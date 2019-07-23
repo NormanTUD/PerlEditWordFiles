@@ -251,6 +251,19 @@ sub insert_page_break { ### TODO
 	$self->{document}->ActiveWindow->Selection->{Range}->InsertBreak(wdPageBreak);
 }
 
+sub close {
+	my $self = shift;
+	$self->_debug("close()");
+	$self->{document}->Close();
+	undef $self->{document};
+}
+
+sub quit {
+	my $self = shift;
+	$self->_debug("quit()");
+	$self->{word}->Quit();
+}
+
 sub _debug {
 	my $self = shift;
 
