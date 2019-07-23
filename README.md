@@ -25,6 +25,7 @@ You can run the test-script by simply running
 - Adding new paragraphs
 - "Replace all" feature
 - Get the whole text (as an array of paragraphs)
+- Add comments for a paragraph
 
 ## Example video
 
