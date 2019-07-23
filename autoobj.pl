@@ -18,10 +18,12 @@ $document->insert_text(text => "Remove Me. Keep me!");
 $document->enter();
 $document->insert_text(text => "Test 123");
 $document->insert_text(text => "Test 456");
+$document->insert_text(text => "Test ".rand().", ".rand());
 #$document->insert_page_break();
 $document->insert_text(text => "test new page");
 $document->replace_all(oldtext => "Heading", newtext => "Überschrift");
 $document->edit_paragraph(paragraph => 3, text => "Replaced");
+$document->add_comment(paragraph => 2, text => "Testkommentar");
 
 
 my @paragraphs = $document->get_paragraphs();
@@ -38,5 +40,5 @@ foreach my $paragraph_index (0 .. $#paragraphs) {
 print ">>>>>\n".join("\n", $document->get_paragraphs())."\n<<<<<\n";
 
 $document->save_doc_as();
-$document->close();
-$document->quit();
+#$document->close();
+#$document->quit();

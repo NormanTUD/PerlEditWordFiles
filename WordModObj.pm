@@ -264,6 +264,22 @@ sub quit {
 	$self->{word}->Quit();
 }
 
+sub add_comment {
+	my $self = shift;
+	my %pars = (
+		paragraph => undef,
+		text => '',
+		@_
+	);
+
+	# Set myRange = ActiveDocument.Paragraphs(3).Range 
+	#  ActiveDocument.Comments.Add Range:=myRange, _ 
+	#   Text:="original third paragraph" 
+
+	$self->_debug("add_comment(paragraph => $pars{paragraph}, text => $pars{text})");
+	$self->{selection}->Comments->Add({ Range => $self->{document}->Paragraphs($pars{paragraph})->Range, Text => $pars{text} });
+}
+
 sub _debug {
 	my $self = shift;
 
