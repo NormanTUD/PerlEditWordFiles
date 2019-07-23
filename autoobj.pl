@@ -6,8 +6,11 @@ $\ = "\n";
 use WordModObj;
 use utf8;
 
-my $document = WordModObj->new(filename => "test.docx", debug => 1, sleep => 3);
+my $document = WordModObj->new(filename => "E:\\test.docx", debug => 1, sleep => 0);
 
+$document->goto_top();
+$document->enter();
+$document->goto_top();
 $document->insert_heading(text => "Heading 1", level => 1);
 $document->insert_heading(text => "Heading 2", level => 2);
 $document->insert_text(text => "Replace me!");
@@ -34,5 +37,4 @@ foreach my $paragraph_index (0 .. $#paragraphs) {
 
 print ">>>>>\n".join("\n", $document->get_paragraphs())."\n<<<<<\n";
 
-#$document->save_doc_as(filename => "C:\\test.docx");
-#$document->close_doc();
+$document->save_doc_as();

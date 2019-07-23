@@ -6,6 +6,7 @@ use Data::Dumper;
 use utf8;
 binmode(STDOUT, ":utf8");
 use open qw/:std :utf8/;
+use File::Spec::Functions 'canonpath';
 
 use Win32::OLE;
 use Win32::OLE::Const 'Microsoft.Word';
@@ -30,7 +31,11 @@ sub new {
 	my $word = CreateObject Win32::OLE 'Word.Application' or die $!;
 	$word->{'Visible'} = 1;
 
-	my $document = $word->Documents->Add;
+	my $document = $word->Documents->Add();
+	if(-f $pars{filename}) {
+		$document = $word->Documents->Open(canonpath($pars{filename})) or die $!;
+	}
+
 	$document->switch_view(view => "wdSeekMainDocument");
 	my $selection = $word->Selection;
 
@@ -48,7 +53,14 @@ sub new {
 		replace => $replace
 	};
 
-	return bless $hash, $class;
+	my $self = bless $hash, $class;
+
+	if($hash->{filename}) {
+		if(!-f $hash->{filename}) {
+			$self->save_doc_as();
+		}
+	}
+	return $self;
 }
 
 sub get_filename {
@@ -120,6 +132,12 @@ sub insert_heading {
 	$self->{selection}->TypeParagraph;
 }
 
+sub goto_top {
+	my $self = shift;
+	$self->_debug("goto_top()");
+	$self->{selection}->HomeKey(wdStory);
+}
+
 sub edit_paragraph {
 	my $self = shift;
 	my %pars = (
@@ -163,7 +181,7 @@ sub enter {
 	my $self = shift;
 
 	$self->_debug("enter()");
-	$self->{document}->ActiveWindow->Selection->TypeParagraph;
+	$self->{selection}->TypeParagraph;
 }
 
 sub switch_view {
@@ -197,10 +215,22 @@ sub switch_view {
 	}
 }
 
+
+sub save {
+	my $self = shift;
+	my %pars = (
+		@_
+	);
+
+	$self->_debug("save()");
+
+	$self->{document}->Save();
+}
+
 sub save_doc_as {
 	my $self = shift;
 	my %pars = (
-		filename => undef,
+		filename => $self->{filename},
 		@_
 	);
 
