@@ -22,8 +22,8 @@ $document->insert_text(text => "Test ".rand().", ".rand());
 #$document->insert_page_break();
 $document->insert_text(text => "test new page");
 $document->replace_all(oldtext => "Heading", newtext => "Überschrift");
-$document->edit_paragraph(paragraph => 3, text => "Replaced");
-$document->add_comment(paragraph => 2, text => "Testkommentar");
+$document->edit_paragraph(paragraph => 3, text => "Replaced Paragraph 123");
+$document->add_comment(paragraph => 3, text => "Testkommentar");
 
 
 my @paragraphs = $document->get_paragraphs();
@@ -33,6 +33,10 @@ foreach my $paragraph_index (0 .. $#paragraphs) {
 		if($text =~ m#Remove Me\. #) {
 			$text =~ s#Remove Me\. ##g;
 			$document->edit_paragraph(paragraph => $paragraph_index + 1, text => $text);
+		}
+		
+		if($text =~ m#Test#) {
+			$document->add_comment(paragraph => $paragraph_index + 1, text => "Testkommentar 2");
 		}
 	}
 }
